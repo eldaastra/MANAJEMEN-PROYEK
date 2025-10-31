@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Konversi Suhu</title>
+    <title>Konversi </title>
 </head>
 <body>
     <h2>Konversi Suhu</h2>
