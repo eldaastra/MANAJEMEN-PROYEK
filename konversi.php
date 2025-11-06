@@ -1,58 +1,46 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Konversi </title>
-</head>
-<body>
-    <h2>Konversi Suhu</h2>
-    <form method="POST">
-        <label>Masukkan Suhu:</label><br>
-        <input type="number" name="nilai" step="any" required><br><br>
+<?php
+// ====================
+// Rani - Fitur Konversi
+// ====================
 
-        <label>Dari:</label><br>
-        <select name="dari">
-            <option value="C">Celsius</option>
-            <option value="F">Fahrenheit</option>
-            <option value="K">Kelvin</option>
-        </select><br><br>
-
-        <label>Ke:</label><br>
-        <select name="ke">
-            <option value="C">Celsius</option>
-            <option value="F">Fahrenheit</option>
-            <option value="K">Kelvin</option>
-        </select><br><br>
-
-        <button type="submit" name="konversi">Konversi</button>
-    </form>
-
-    <?php
-    if (isset($_POST['konversi'])) {
-        $nilai = $_POST['nilai'];
-        $dari = $_POST['dari'];
-        $ke = $_POST['ke'];
-        $hasil = 0;
-
-        if ($dari == $ke) {
-            $hasil = $nilai;
-        } elseif ($dari == "C" && $ke == "F") {
-            $hasil = ($nilai * 9/5) + 32;
-        } elseif ($dari == "C" && $ke == "K") {
-            $hasil = $nilai + 273.15;
-        } elseif ($dari == "F" && $ke == "C") {
-            $hasil = ($nilai - 32) * 5/9;
-        } elseif ($dari == "F" && $ke == "K") {
-            $hasil = ($nilai - 32) * 5/9 + 273.15;
-        } elseif ($dari == "K" && $ke == "C") {
-            $hasil = $nilai - 273.15;
-        } elseif ($dari == "K" && $ke == "F") {
-            $hasil = ($nilai - 273.15) * 9/5 + 32;
-        }
-
-        echo "<h3>Hasil Konversi: $hasil °$ke</h3>";
+function konversi($nilai, $dari, $ke, $jenis) {
+    switch ($jenis) {
+        case 'suhu':
+            return konversiSuhu($nilai, $dari, $ke);
+        case 'panjang':
+            return konversiPanjang($nilai, $dari, $ke);
+        case 'berat':
+            return konversiBerat($nilai, $dari, $ke);
+        default:
+            return "error_satuan";
     }
-    ?>
-</body>
-</html>
+}
 
+function konversiSuhu($nilai, $dari, $ke) {
+    if ($dari == 'celsius' && $ke == 'fahrenheit') return ($nilai * 9/5) + 32;
+    if ($dari == 'celsius' && $ke == 'kelvin') return $nilai + 273.15;
+    if ($dari == 'fahrenheit' && $ke == 'celsius') return ($nilai - 32) * 5/9;
+    if ($dari == 'fahrenheit' && $ke == 'kelvin') return ($nilai - 32) * 5/9 + 273.15;
+    if ($dari == 'kelvin' && $ke == 'celsius') return $nilai - 273.15;
+    if ($dari == 'kelvin' && $ke == 'fahrenheit') return ($nilai - 273.15) * 9/5 + 32;
+    return $nilai;
+}
+
+function konversiPanjang($nilai, $dari, $ke) {
+    $satuan = [
+        "km" => 1000, "hm" => 100, "dam" => 10,
+        "m" => 1, "dm" => 0.1, "cm" => 0.01, "mm" => 0.001
+    ];
+    $meter = $nilai * $satuan[$dari];
+    return $meter / $satuan[$ke];
+}
+
+function konversiBerat($nilai, $dari, $ke) {
+    $satuan = [
+        "kg" => 1000, "hg" => 100, "dag" => 10,
+        "g" => 1, "dg" => 0.1, "cg" => 0.01, "mg" => 0.001
+    ];
+    $gram = $nilai * $satuan[$dari];
+    return $gram / $satuan[$ke];
+}
+?>
